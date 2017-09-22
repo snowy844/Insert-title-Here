@@ -490,7 +490,7 @@ MonoBehaviour:
   Azure_CurveMode: 0
   Azure_DayOfWeek: 0
   Azure_NumberOfDays: 7
-  Azure_Timeline: 6.5
+  Azure_Timeline: 7.1
   Azure_Latitude: 0
   Azure_Longitude: 180
   Azure_DayCycle: 0

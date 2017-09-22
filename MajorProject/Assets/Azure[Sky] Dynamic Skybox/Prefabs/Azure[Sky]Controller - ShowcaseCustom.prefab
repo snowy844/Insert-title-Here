@@ -492,10 +492,10 @@ MonoBehaviour:
   Azure_ShowObjectsAndMaterialsTab: 0
   Azure_ShowScatteringTab: 0
   Azure_ShowNightSkyTab: 0
-  Azure_ShowCloudTab: 0
-  Azure_ShowFogTab: 0
+  Azure_ShowCloudTab: 1
+  Azure_ShowFogTab: 1
   Azure_ShowLightingTab: 0
-  Azure_ShowOptionsTab: 0
+  Azure_ShowOptionsTab: 1
   Azure_ShowOutputsTab: 0
   Azure_CurveColorField: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   Azure_TimeMode: 0
@@ -8722,13 +8722,13 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 2
       time: -1
-      value: 0.75
+      value: 0.6617276
       inSlope: 0
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
-      time: 1
-      value: 0.75
+      time: 0.99312717
+      value: 0.6617276
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -12222,28 +12222,16 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 2
       time: -1
-      value: 0.24999997
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      value: 0
+      inSlope: 4.004587
+      outSlope: 4.004587
+      tangentMode: 34
     - serializedVersion: 2
-      time: 0
-      value: 0.24999997
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.26
-      value: 1.6999999
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1
-      value: 1.75
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      time: 0.99770904
+      value: 8
+      inSlope: 4.004587
+      outSlope: 4.004587
+      tangentMode: 34
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
@@ -13409,7 +13397,7 @@ MonoBehaviour:
   Azure_FollowActiveMainCamera: 1
   Azure_AutomaticSunIntensity: 1
   Azure_AutomaticMoonIntensity: 1
-  Azure_GammaCorrection: 2.2
+  Azure_GammaCorrection: 1.083
   Azure_CullMode: 2
   Azure_ShaderMode: 1
   Azure_SkyMode: 1
