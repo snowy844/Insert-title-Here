@@ -6,6 +6,7 @@ public class empty : MonoBehaviour {
 
     public Transform player;
     PlayerMovement vel;
+    
 	// Use this for initialization
 	void Start () {
         vel = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
@@ -18,5 +19,6 @@ public class empty : MonoBehaviour {
         //if (Input.GetAxis("Horizontal")!= 0) {
         //    transform.rotation = Quaternion.Euler(0, player.eulerAngles.y, 0);
         //}
+        
 	}
 }

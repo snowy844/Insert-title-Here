@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour {
 
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
-        print(m_grounded);
+      
 
         //if (sliding) {
         //    if (Input.GetButton("StrafeLeft"))
@@ -146,7 +146,7 @@ public class PlayerMovement : MonoBehaviour {
        
         if (running) {
             movementSpeed = runSpeed + (slideMultiplyer * .5f); ;
-            print(movementSpeed);
+            
         }
         else {
             movementSpeed = walkSpeed + (slideMultiplyer * .25f); ;
@@ -275,7 +275,7 @@ public class PlayerMovement : MonoBehaviour {
         }
        else if (Input.GetButtonUp("Jump")) {
             jump = 1;
-          
+            gravity = 0.87f;
         }
         if (m_grounded == false) {
             chargetimer += Time.deltaTime;
@@ -285,8 +285,8 @@ public class PlayerMovement : MonoBehaviour {
             if (Input.GetKey(KeyCode.E) && chargetimer < chargetime || Input.GetButton("Glide") && chargetimer < chargetime) {
                 gravity += plusGravity;
                 //Physics.gravity = new Vector3(0, gravity, 0);
-                rb.velocity = 12 * transform.forward;
-                //rb.AddForce(transform.forward * 50, ForceMode.Impulse);
+                rb.velocity = 20 * transform.forward;
+               // rb.AddForce(transform.forward * 10, ForceMode.VelocityChange);
                
             }
             //Code that brings player back down
@@ -332,7 +332,6 @@ public class PlayerMovement : MonoBehaviour {
             v = 0.1f;
         if (h == 0)
             h = 0.1f;
-        print(v);
 
         //Move player around based on the players mouse
         //float mouseInput = Input.GetAxis("Mouse X");
@@ -342,7 +341,7 @@ public class PlayerMovement : MonoBehaviour {
             currentRot = lookRot;
 
         }
-
+     
         //if (sliding) {
         //    float mouseInput = Input.GetAxisRaw("RightThumb");
         //    Vector3 lookhere = new Vector3(0, mouseInput * 3, 0);
@@ -369,7 +368,7 @@ public class PlayerMovement : MonoBehaviour {
         else {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, Vector3.up) * transform.rotation;
             targetRotation = Quaternion.Euler(targetRotation.eulerAngles.x, currentRot.eulerAngles.y, targetRotation.eulerAngles.z);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * (Mathf.Clamp(v + Mathf.Abs(h), 0, 1)) * 10);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * (Mathf.Clamp(v + Mathf.Abs(h), 0f, 1)) * 10);
         }
     }
 

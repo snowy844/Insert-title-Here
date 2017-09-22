@@ -27,19 +27,22 @@ public class NewCamera : MonoBehaviour {
     [SerializeField]
     private Vector3 bumperRayOffset; // allows offset of the bumper ray from target origin
     PlayerMovement speed;
-    Vector3 offset = new Vector3(0,4,0);
+    Vector3 offset = new Vector3(0,2,-4);
     public Transform player;
+    public Camera main;
     Vector3 lerpPos;
     /// <Summary>
     /// If the target moves, the camera should child the target to allow for smoother movement. DR
     /// </Summary>
     private void Awake() { 
         speed = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
-        
+        main = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        main.transform.position = target.position + offset;
     }
 
+
     private void FixedUpdate() {
-        Vector3 wantedPosition = target.TransformPoint(0, height, -distance);
+        Vector3 wantedPosition = transform.TransformPoint(0, height, -distance);
         
        // check to see if there is anything behind the target
        RaycastHit hit;
@@ -49,12 +52,23 @@ public class NewCamera : MonoBehaviour {
       
         Vector3 lookhere = new Vector3(/*(3 * Time.deltaTime) **/ rightV * 3, /*(3*Time.deltaTime)**/rightH * 3, 0);
         transform.eulerAngles += lookhere;
-        
-        // cast the bumper ray out from rear and check to see if there is anything behind
-        if (Physics.Raycast(target.TransformPoint(bumperRayOffset), back, out hit, bumperDistanceCheck)
-            && hit.transform != target) // ignore ray-casts that hit the user. DR
-        {
 
+        // cast the bumper ray out from rear and check to see if there is anything behind
+        //if (Physics.Raycast(target.TransformPoint(bumperRayOffset), back, out hit, bumperDistanceCheck)
+        //    && hit.transform != target) // ignore ray-casts that hit the user. DR
+        //{
+
+        //    // clamp wanted position to hit position
+        //    wantedPosition.x = hit.point.x;
+        //    wantedPosition.z = hit.point.z;
+        //    wantedPosition.y = Mathf.Lerp(hit.point.y + bumperCameraHeight, wantedPosition.y, Time.deltaTime * damping);
+        //}
+        Debug.DrawRay(transform.TransformPoint(bumperRayOffset), -transform.forward, Color.black);
+        if (Physics.Raycast(transform.TransformPoint(bumperRayOffset), -transform.forward, out hit, bumperDistanceCheck)
+            && hit.transform != transform) // ignore ray-casts that hit the user. DR
+        {
+            Debug.DrawRay(transform.TransformPoint(bumperRayOffset), -transform.forward);
+            
             // clamp wanted position to hit position
             wantedPosition.x = hit.point.x;
             wantedPosition.z = hit.point.z;
@@ -67,6 +81,7 @@ public class NewCamera : MonoBehaviour {
         
         playerRot.x = playerRot.x - .02f;
         //playerRot.z = 0;
+       main.transform.position = Vector3.Lerp(main.transform.position, wantedPosition, Time.deltaTime * damping);
         if (!speed.sliding) {
 
             transform.rotation = Quaternion.Slerp(transform.rotation, playerRot, (Time.deltaTime * rotationDamping) * rotVal);
