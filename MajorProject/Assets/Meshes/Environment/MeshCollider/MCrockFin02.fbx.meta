@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1821d55cec643764daba8a8b2a8737aa
+guid: 60e94286422dab94ebb2149a7fe10dc5
 timeCreated: 1505960297
 licenseType: Free
 ModelImporter:
@@ -61,7 +61,7 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
