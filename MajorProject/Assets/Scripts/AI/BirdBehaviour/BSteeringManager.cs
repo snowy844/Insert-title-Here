@@ -114,30 +114,38 @@ public class BSteeringManager : MonoBehaviour {
     Vector3 collisionAvoidance()
     {
         GameObject mostThreatening = findMostThreateningObstacle();
-        Mesh mesh;
+        //Mesh mesh;
         Vector3 avoidance = Vector3.zero;
+        //Collider col;
 
         if (mostThreatening != null)
         {
-            mesh = mostThreatening.GetComponent<MeshFilter>().mesh;
-            Vector3[] vertices = mesh.vertices;
-            Vector2[] uvs = new Vector2[vertices.Length];
-            Bounds bounds = mesh.bounds;
+            //mesh = mostThreatening.GetComponent<MeshFilter>().mesh;
+            //Vector3[] vertices = mesh.vertices;
+            //Vector2[] uvs = new Vector2[vertices.Length];
+            //Bounds bounds = mesh.bounds;
 
-            //testing out different ways to avoid shit
+            ////testing out different ways to avoid shit
 
-            avoidance.x += ahead.x - bounds.size.x;
-            avoidance.y += ahead.y - bounds.size.y;
-            avoidance.z += ahead.z - bounds.size.z;
+            //avoidance.x += ahead.x - bounds.size.x;
+            //avoidance.y += ahead.y - bounds.size.y;
+            //avoidance.z += ahead.z - bounds.size.z;
 
             //print(bounds.size.x);
             //print(mostThreatening.transform.position.x);
+
+            //col = mostThreatening.GetComponent<Collider>();
+            //Bounds bounds = col.bounds;
+
+            //avoidance.x += ahead.x - bounds.size.x;
+            //avoidance.y += ahead.y - bounds.size.y;
+            //avoidance.z += ahead.z - bounds.size.z;
 
             //avoidance.x += ahead.x - mostThreatening.transform.position.x;
             //avoidance.y += ahead.y - mostThreatening.transform.position.y;
             //avoidance.z += ahead.z - mostThreatening.transform.position.z;
 
-
+            avoidance += ahead - mostThreatening.transform.position;
 
             avoidance.Normalize();
             avoidance.Scale(Vector3.one * maxAvoidanceForce);
@@ -171,12 +179,15 @@ public class BSteeringManager : MonoBehaviour {
 
     bool lineIntersectsCircle(Vector3 a, Vector3 b, GameObject go)
     {
-        //Collider col = go.GetComponent<Collider>();
-        //float radius = col.bounds.extents.magnitude;
-
-        Renderer rend = go.GetComponent<MeshRenderer>();
-        float radius = rend.bounds.extents.magnitude;
-        return Vector3.Distance(go.transform.position, a) <= radius || Vector3.Distance(go.transform.position, b) <= radius;
+        if (go.GetComponent<Collider>() != null)
+        {
+            Collider col = go.GetComponent<Collider>();
+            float radius = col.bounds.extents.magnitude;
+            return Vector3.Distance(go.transform.position, a) <= radius || Vector3.Distance(go.transform.position, b) <= radius;
+        }
+        else
+            return false;
+        
     }
 
     Vector3 Seperation()
