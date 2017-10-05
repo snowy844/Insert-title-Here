@@ -42,6 +42,14 @@ public class BSteeringManager : MonoBehaviour {
         Seek(target, slowRadius);
     }
 
+    void Test()
+    {
+        //Collider col = GetComponent<Collider>();
+        //Vector3 closestPoint = col.ClosestPointOnBounds();
+        //float distance = Vector3.Distance(closestPoint, );
+        //print(distance);
+    }
+
     void Steering(Vector3 p_Velocity, float p_Speed)
     {
         //speed = Random.Range(0.1f, maxSpeed);
@@ -73,7 +81,7 @@ public class BSteeringManager : MonoBehaviour {
 
         steering = desiredVelocity - velocity;
         steering = Vector3.ClampMagnitude(steering, maxForce);
-        steering = steering + Seperation() + collisionAvoidance();
+        steering = steering + Seperation() + collisionAvoidance()/* + AvoidTerrain()*/;
         steering = steering / mass;
         velocity = Vector3.ClampMagnitude(velocity + steering, maxSpeed);
 
@@ -111,33 +119,39 @@ public class BSteeringManager : MonoBehaviour {
         ahead2 = position + Vector3.Normalize(velocity) * maxSeeAhead * 0.5f;
     }
 
+    Vector3 AvoidTerrain()
+    {
+        //GameObject terrain = GameObject.Find("map_MM_01");
+        Vector3 avoidance = Vector3.zero;
+
+        //Terrain ter = GameObject.Find;
+
+        ////Collider col = terrain.GetComponent<Collider>();
+
+        //Bounds bounds = terrain.GetComponent<Terrain>().;
+
+        //avoidance = avoidance + (this.transform.position - bounds.size);
+        
+
+        avoidance.Normalize();
+        avoidance.Scale(Vector3.one * maxAvoidanceForce);
+
+
+        return avoidance;
+    }
+
     Vector3 collisionAvoidance()
     {
         GameObject mostThreatening = findMostThreateningObstacle();
-        Mesh mesh;
         Vector3 avoidance = Vector3.zero;
 
         if (mostThreatening != null)
         {
-            mesh = mostThreatening.GetComponent<MeshFilter>().mesh;
-            Vector3[] vertices = mesh.vertices;
-            Vector2[] uvs = new Vector2[vertices.Length];
-            Bounds bounds = mesh.bounds;
-
-            //testing out different ways to avoid shit
-
-            avoidance.x += ahead.x - bounds.size.x;
-            avoidance.y += ahead.y - bounds.size.y;
-            avoidance.z += ahead.z - bounds.size.z;
-
-            //print(bounds.size.x);
-            //print(mostThreatening.transform.position.x);
-
             //avoidance.x += ahead.x - mostThreatening.transform.position.x;
             //avoidance.y += ahead.y - mostThreatening.transform.position.y;
             //avoidance.z += ahead.z - mostThreatening.transform.position.z;
 
-
+            avoidance += ahead - mostThreatening.transform.position;
 
             avoidance.Normalize();
             avoidance.Scale(Vector3.one * maxAvoidanceForce);
@@ -171,12 +185,15 @@ public class BSteeringManager : MonoBehaviour {
 
     bool lineIntersectsCircle(Vector3 a, Vector3 b, GameObject go)
     {
-        //Collider col = go.GetComponent<Collider>();
-        //float radius = col.bounds.extents.magnitude;
-
-        Renderer rend = go.GetComponent<MeshRenderer>();
-        float radius = rend.bounds.extents.magnitude;
-        return Vector3.Distance(go.transform.position, a) <= radius || Vector3.Distance(go.transform.position, b) <= radius;
+        if (go.GetComponent<Collider>() != null)
+        {
+            Collider col = go.GetComponent<Collider>();
+            float radius = col.bounds.extents.magnitude;
+            return Vector3.Distance(go.transform.position, a) <= radius || Vector3.Distance(go.transform.position, b) <= radius;
+        }
+        else
+            return false;
+        
     }
 
     Vector3 Seperation()
@@ -190,8 +207,6 @@ public class BSteeringManager : MonoBehaviour {
         {
             if(objects[i]!= this && Vector3.Distance(objects[i].transform.position,this.transform.position) <= maxSeperation)
             {
-                //force += objects[i].transform.position - this.transform.position;
-
                 force = force + (this.transform.position - objects[i].transform.position);
                 neighbourCount++;
             }
@@ -217,9 +232,11 @@ public class BSteeringManager : MonoBehaviour {
         Gizmos.DrawLine(transform.position, ahead2);
         Gizmos.color = Color.red;
         Gizmos.DrawLine(ahead2, ahead);
-        //Gizmos.color = Color.black;
-        //Gizmos.DrawLine(transform.position, target);
+        Gizmos.color = Color.black;
+        Gizmos.DrawLine(transform.position, target);
     }
+
+
 
     public float getAngle(Vector3 vector)
     {
