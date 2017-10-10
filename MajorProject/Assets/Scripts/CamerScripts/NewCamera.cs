@@ -80,7 +80,7 @@ public class NewCamera : MonoBehaviour {
         Quaternion playerRot = player.rotation;
         
         playerRot.x = playerRot.x - .02f;
-        //playerRot.z = 0;
+        playerRot.z = 0;
        main.transform.position = Vector3.Lerp(main.transform.position, wantedPosition, Time.deltaTime * damping);
         if (!speed.sliding) {
 

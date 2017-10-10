@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour {
     public float burm;
     public float chargetimer;
     public float chargetime;
+    public float jumpCharger;
+    public float Maxjumpcharge;
     public int rolldistance;
     public float gravity;
     public float plusGravity;
@@ -50,8 +52,8 @@ public class PlayerMovement : MonoBehaviour {
     private float _doubleTapTimeD;
     private float worldForwardAngle;
     private float worldRightAngle;
-    
 
+    Animator player;
     private int jump = 0;
 
     private bool running;
@@ -66,8 +68,9 @@ public class PlayerMovement : MonoBehaviour {
 
     void Start() {
         globalForce = Vector3.zero;
-        animator = GetComponent<Animator>();
+        
         rb = GetComponent<Rigidbody>();
+       // player = GameObject.FindGameObjectWithTag("kid").GetComponent<Animator>();
         //m_grounded = true;
         gravity = .87f;
         cam = Camera.main;
@@ -78,18 +81,19 @@ public class PlayerMovement : MonoBehaviour {
        
         Jump();
         Landing();
-        if (Input.GetMouseButton(0) && m_grounded || Input.GetButtonDown("Slide") && m_grounded) {
+        if (Input.GetMouseButton(0) && m_grounded || Input.GetButton("Slide") && m_grounded) {
             sliding = !sliding;
             running = false;
         }
-        
+       
+
     }
 
     void FixedUpdate() {
-        
-      
-        ///Jump();
 
+
+        ///Jump();
+        print(jumpCharger);
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
       
@@ -137,19 +141,26 @@ public class PlayerMovement : MonoBehaviour {
     }
 
     void Movement(float x, float v) {
-       
-     
-        if (Input.GetKey(KeyCode.LeftShift) || Input.GetButtonDown("Run")) {
-            running = !running;
+
+        if (Input.GetKey(KeyCode.LeftShift) || Input.GetButton("Run")) {
+            running = true;
             sliding = false;
+            //  player.SetBool("runningIsTrue", true);
         }
-       
+        else {
+            running = false;
+        }
+
+
         if (running) {
             movementSpeed = runSpeed + (slideMultiplyer * .5f); ;
-            
+            //animator.Play("run");
+           
         }
         else {
             movementSpeed = walkSpeed + (slideMultiplyer * .25f); ;
+            //imator.Play("run");
+           //player.SetBool("runningIsTrue", false);
         }
         
         if (sliding) {
@@ -266,16 +277,28 @@ public class PlayerMovement : MonoBehaviour {
     
     void Jump() {
         //Player jumps up
-        if (Input.GetButtonDown("Jump") && m_grounded == true) {
+        if (Input.GetButton("Jump") && m_grounded == true) {
+            jumpCharger += Time.deltaTime;
+
+            if (jumpCharger < Maxjumpcharge) {
+                jumpForce = jumpCharger + 10 ;
+            }
+            if( jumpCharger >= Maxjumpcharge) {
+                jumpForce = Maxjumpcharge + 10;
+            }
+              
+                // animator.SetBool("jumpIsTrue", true);
+                gravity = 0.87f;
+            
+        }
+       else if (Input.GetButtonUp("Jump")) {
             rb.AddForce(transform.up * jumpForce + moveDir, ForceMode.VelocityChange);
             m_grounded = false;
             running = false;
             sliding = false;
-            gravity = 0.87f;
-        }
-       else if (Input.GetButtonUp("Jump")) {
             jump = 1;
             gravity = 0.87f;
+            jumpCharger = 0;
         }
         if (m_grounded == false) {
             chargetimer += Time.deltaTime;
