@@ -28,7 +28,7 @@ public class BSteeringManager : MonoBehaviour {
     void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        target = player.transform.TransformPoint(0, 0, -10);
+        target = player.transform.TransformPoint(0, 5, -10);
     }
 
     // Update is called once per frame
@@ -39,25 +39,12 @@ public class BSteeringManager : MonoBehaviour {
         threat = findMostThreateningObstacle();
 
         Ahead(target);
-        Seek(target, slowRadius);
-    }
+        if (Random.Range(0, 5) < 1)
+        {
+            Seek(target, slowRadius);
+        }
+        transform.Translate(Time.deltaTime * speed, Time.deltaTime * speed, Time.deltaTime * speed);
 
-    void Test()
-    {
-        //Collider col = GetComponent<Collider>();
-        //Vector3 closestPoint = col.ClosestPointOnBounds();
-        //float distance = Vector3.Distance(closestPoint, );
-        //print(distance);
-    }
-
-    void Steering(Vector3 p_Velocity, float p_Speed)
-    {
-        //speed = Random.Range(0.1f, maxSpeed);
-
-        transform.position += p_Velocity * Time.deltaTime * p_Speed;
-
-        //transform.Translate(0, 0, Time.deltaTime * speed);
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(player.transform.position), 3 * Time.deltaTime);
     }
 
     void Seek(Vector3 target, float radius)
@@ -81,12 +68,11 @@ public class BSteeringManager : MonoBehaviour {
 
         steering = desiredVelocity - velocity;
         steering = Vector3.ClampMagnitude(steering, maxForce);
-        steering = steering + Seperation() + collisionAvoidance()/* + AvoidTerrain()*/;
+        steering = steering + Seperation() + collisionAvoidance();
         steering = steering / mass;
         velocity = Vector3.ClampMagnitude(velocity + steering, maxSpeed);
 
         transform.position += velocity * Time.deltaTime * speed;
-        //Steering(velocity, speed);
         transform.LookAt(player.transform.position);
     }
 
@@ -121,21 +107,23 @@ public class BSteeringManager : MonoBehaviour {
 
     Vector3 AvoidTerrain()
     {
-        //GameObject terrain = GameObject.Find("map_MM_01");
+        //this shit still experimental
         Vector3 avoidance = Vector3.zero;
 
-        //Terrain ter = GameObject.Find;
-
-        ////Collider col = terrain.GetComponent<Collider>();
-
-        //Bounds bounds = terrain.GetComponent<Terrain>().;
-
-        //avoidance = avoidance + (this.transform.position - bounds.size);
-        
-
-        avoidance.Normalize();
-        avoidance.Scale(Vector3.one * maxAvoidanceForce);
-
+        RaycastHit hit;
+        float distance;
+        if (Physics.Raycast(this.transform.position, Vector3.down, out hit))
+        {
+            distance = hit.distance;
+            avoidance += new Vector3(0,distance,0);
+            avoidance.Normalize();
+            avoidance.Scale(Vector3.one * maxAvoidanceForce);
+            Debug.DrawLine(this.transform.position, hit.point, Color.cyan);
+        }
+        else
+        {
+            avoidance.Scale(Vector3.zero);
+        }
 
         return avoidance;
     }
@@ -147,12 +135,7 @@ public class BSteeringManager : MonoBehaviour {
 
         if (mostThreatening != null)
         {
-            //avoidance.x += ahead.x - mostThreatening.transform.position.x;
-            //avoidance.y += ahead.y - mostThreatening.transform.position.y;
-            //avoidance.z += ahead.z - mostThreatening.transform.position.z;
-
             avoidance += ahead - mostThreatening.transform.position;
-
             avoidance.Normalize();
             avoidance.Scale(Vector3.one * maxAvoidanceForce);
         }
@@ -199,22 +182,43 @@ public class BSteeringManager : MonoBehaviour {
     Vector3 Seperation()
     {
         Vector3 force = Vector3.zero;
+        Vector3 avoid = Vector3.zero;
+
         int neighbourCount = 0;
 
         GameObject[] objects = GameObject.FindGameObjectsWithTag("Bird");
 
+        float dist;
+
         for(int i = 0; i < objects.Length; i++)
         {
-            if(objects[i]!= this && Vector3.Distance(objects[i].transform.position,this.transform.position) <= maxSeperation)
+            if (objects[i] != this)
             {
-                force = force + (this.transform.position - objects[i].transform.position);
-                neighbourCount++;
+                dist = Vector3.Distance(objects[i].transform.position, this.transform.position);
+                if (dist <= maxSeperation)
+                {
+                    //force = force + (this.transform.position - objects[i].transform.position);
+                    //force = objects[i].transform.position - this.transform.position;
+
+                    force += objects[i].transform.position;
+
+
+                    neighbourCount++;
+
+                    if(dist < 2.0f)
+                    {
+                        avoid = avoid + (this.transform.position - objects[i].transform.position);
+                    }
+
+                }
             }
         }
 
         if(neighbourCount != 0)
         {
             force /= neighbourCount;
+
+            force = (force + avoid) - this.transform.position;
 
             force = Vector3.ClampMagnitude(force, -1);
         }
