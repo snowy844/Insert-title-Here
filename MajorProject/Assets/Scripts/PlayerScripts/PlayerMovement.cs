@@ -53,7 +53,7 @@ public class PlayerMovement : MonoBehaviour {
     private float worldForwardAngle;
     private float worldRightAngle;
 
-    Animator player;
+    Animator playerAnim;
     private int jump = 0;
 
     private bool running;
@@ -67,14 +67,13 @@ public class PlayerMovement : MonoBehaviour {
 
 
     void Start() {
+
         globalForce = Vector3.zero;
-        
         rb = GetComponent<Rigidbody>();
-       // player = GameObject.FindGameObjectWithTag("kid").GetComponent<Animator>();
-        //m_grounded = true;
+        playerAnim = GameObject.FindGameObjectWithTag("kid").GetComponent<Animator>();
         gravity = .87f;
         cam = Camera.main;
-       // runSpeed = runSpeed + (slideMultiplyer * .25f);
+     
     }
 
     void Update() {
@@ -93,7 +92,7 @@ public class PlayerMovement : MonoBehaviour {
 
 
         ///Jump();
-        print(jumpCharger);
+       
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
       
@@ -108,6 +107,7 @@ public class PlayerMovement : MonoBehaviour {
       
         m_grounded = IsGrounded();
 
+        print(m_grounded);
         checkForDoubleTap(h, v);
         checkForSlopes();
         Movement(h, v);
@@ -118,7 +118,9 @@ public class PlayerMovement : MonoBehaviour {
 
         speed = Vector3.Distance( oldPos, transform.position);
         oldPos = transform.position;
-       
+
+        playerAnim.SetBool("jumpIsTrue", !m_grounded);
+
 
     }
 
@@ -145,10 +147,12 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetButton("Run")) {
             running = true;
             sliding = false;
-            //  player.SetBool("runningIsTrue", true);
+           
+           
         }
         else {
             running = false;
+          //  player.SetBool("runningIsTrue", false);
         }
 
 
@@ -163,25 +167,27 @@ public class PlayerMovement : MonoBehaviour {
            //player.SetBool("runningIsTrue", false);
         }
         
-        if (sliding) {
-            //The Player is sliding
-            float xProj = animator.GetFloat("xProj");
-            moveDir = transform.TransformDirection(xProj * burm, 0, v * movementSpeed);
+        //if (sliding) {
+        //    //The Player is sliding
+        //    float xProj = animator.GetFloat("xProj");
+        //    moveDir = transform.TransformDirection(xProj * burm, 0, v * movementSpeed);
           
-            rb.MovePosition(transform.position + (moveDir * Time.deltaTime));
-            rb.AddForce(moveDir * Time.deltaTime, ForceMode.VelocityChange);
-        }
+        //    rb.MovePosition(transform.position + (moveDir * Time.deltaTime));
+        //    rb.AddForce(moveDir * Time.deltaTime, ForceMode.VelocityChange);
+        //}
 
        if(!sliding) {
 
             //The Player is running
-           // Vector3 _input = new Vector3(Input.GetAxis("Horizontal") * 3, 0, Input.GetAxis("Horizontal") * 3);
+            // Vector3 _input = new Vector3(Input.GetAxis("Horizontal") * 3, 0, Input.GetAxis("Horizontal") * 3);
 
             //Vector3 _moveDir = cam.transform.TransformDirection(_input);
-            moveDir = transform.TransformDirection(0, 0, Mathf.Clamp( v  + Mathf.Abs(x),-1,1) * movementSpeed);
-            rb.MovePosition(transform.position + (moveDir * Time.deltaTime));
-            //if (v < 0)
-            //    rb.MovePosition(transform.position - (moveDir * Time.deltaTime));
+            // moveDir = transform.TransformDirection(0, 0, Mathf.Clamp(Mathf.Abs(v + x),-1,1)   /*Mathf.Abs*x)/*-1,1)*/ * movementSpeed);
+            if (v != 0 || x != 0) 
+                //rb.MovePosition(transform.position + (transform.forward* movementSpeed * Time.deltaTime));
+                rb.MovePosition(transform.position + (transform.forward * movementSpeed * Time.deltaTime));
+
+            playerAnim.SetFloat("runSpeed", Mathf.Abs(v + x));
 
         }
 
@@ -281,17 +287,18 @@ public class PlayerMovement : MonoBehaviour {
             jumpCharger += Time.deltaTime;
 
             if (jumpCharger < Maxjumpcharge) {
-                jumpForce = jumpCharger + 10 ;
+                jumpForce = jumpCharger + 20 ;
             }
             if( jumpCharger >= Maxjumpcharge) {
-                jumpForce = Maxjumpcharge + 10;
+                jumpForce = Maxjumpcharge + 20;
             }
               
-                // animator.SetBool("jumpIsTrue", true);
+                playerAnim.SetBool("jumpPrep", true);
                 gravity = 0.87f;
             
         }
        else if (Input.GetButtonUp("Jump")) {
+
             rb.AddForce(transform.up * jumpForce + moveDir, ForceMode.VelocityChange);
             m_grounded = false;
             running = false;
@@ -299,6 +306,8 @@ public class PlayerMovement : MonoBehaviour {
             jump = 1;
             gravity = 0.87f;
             jumpCharger = 0;
+            //playerAnim.SetBool("jumpIsTrue", !m_grounded);
+            playerAnim.SetBool("jumpPrep", false);
         }
         if (m_grounded == false) {
             chargetimer += Time.deltaTime;
@@ -351,20 +360,18 @@ public class PlayerMovement : MonoBehaviour {
 
         float v = Input.GetAxis("Vertical");
         float h = Input.GetAxis("Horizontal");
-        if (v == 0)
-            v = 0.1f;
-        if (h == 0)
-            h = 0.1f;
+       
 
         //Move player around based on the players mouse
         //float mouseInput = Input.GetAxis("Mouse X");
         Vector3 lookhere1 = cam.transform.TransformDirection(new Vector3(Input.GetAxis("Horizontal") * 3, 0, Input.GetAxis("Vertical") * 3));
+        
         Quaternion lookRot = Quaternion.LookRotation(lookhere1);
         if (lookRot.y != 0) {
             currentRot = lookRot;
 
         }
-     
+
         //if (sliding) {
         //    float mouseInput = Input.GetAxisRaw("RightThumb");
         //    Vector3 lookhere = new Vector3(0, mouseInput * 3, 0);
@@ -384,14 +391,14 @@ public class PlayerMovement : MonoBehaviour {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, hit.normal) * transform.rotation;
 
             targetRotation = Quaternion.Euler(targetRotation.eulerAngles.x, currentRot.eulerAngles.y, targetRotation.eulerAngles.z);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, (Time.deltaTime * 20) * (Mathf.Clamp(v + Mathf.Abs(h), 0f, 1)));
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, (Time.deltaTime * 20) /* (Mathf.Clamp(v + Mathf.Abs(h), 0f, 1))*/);
         }
 
         ////If the player isn't grounded rotate them so there transform up is the same as the worlds up
         else {
             Quaternion targetRotation = Quaternion.FromToRotation(transform.up, Vector3.up) * transform.rotation;
             targetRotation = Quaternion.Euler(targetRotation.eulerAngles.x, currentRot.eulerAngles.y, targetRotation.eulerAngles.z);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * (Mathf.Clamp(v + Mathf.Abs(h), 0f, 1)) * 10);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime /** (Mathf.Clamp(v + Mathf.Abs(h), 0f, 1))*/ * 10);
         }
     }
 
