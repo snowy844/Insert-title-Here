@@ -805,6 +805,11 @@ Prefab:
       propertyPath: m_Name
       value: Cube (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 114337361758463006, guid: e33179783b7bf254cb0e82bbe3b177ee,
+        type: 2}
+      propertyPath: maxSeperation
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114176655429710832, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
     - {fileID: 114340466872516412, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
@@ -2731,6 +2736,11 @@ Prefab:
       propertyPath: m_Name
       value: Cube (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 114337361758463006, guid: e33179783b7bf254cb0e82bbe3b177ee,
+        type: 2}
+      propertyPath: maxSeperation
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114176655429710832, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
     - {fileID: 114340466872516412, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
@@ -3323,6 +3333,11 @@ Prefab:
       propertyPath: m_Name
       value: Cube (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 114337361758463006, guid: e33179783b7bf254cb0e82bbe3b177ee,
+        type: 2}
+      propertyPath: maxSeperation
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114176655429710832, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
     - {fileID: 114340466872516412, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
@@ -3631,6 +3646,11 @@ Prefab:
     - target: {fileID: 1458469314323648, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
       propertyPath: m_Name
       value: Cube (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114337361758463006, guid: e33179783b7bf254cb0e82bbe3b177ee,
+        type: 2}
+      propertyPath: maxSeperation
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114176655429710832, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
@@ -4053,6 +4073,11 @@ Prefab:
       propertyPath: m_Name
       value: Cube (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 114337361758463006, guid: e33179783b7bf254cb0e82bbe3b177ee,
+        type: 2}
+      propertyPath: maxSeperation
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114176655429710832, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
     - {fileID: 114340466872516412, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
@@ -4291,6 +4316,11 @@ Prefab:
         type: 2}
       propertyPath: maxVelocity
       value: 3.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 114337361758463006, guid: e33179783b7bf254cb0e82bbe3b177ee,
+        type: 2}
+      propertyPath: maxSeperation
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114176655429710832, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
@@ -4726,6 +4756,11 @@ Prefab:
     - target: {fileID: 1458469314323648, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
       propertyPath: m_Name
       value: Cube (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 114337361758463006, guid: e33179783b7bf254cb0e82bbe3b177ee,
+        type: 2}
+      propertyPath: maxSeperation
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114176655429710832, guid: e33179783b7bf254cb0e82bbe3b177ee, type: 2}
