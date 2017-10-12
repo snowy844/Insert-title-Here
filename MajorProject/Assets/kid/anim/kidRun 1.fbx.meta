@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b2e69f9140a2d9c439b4bac0eac947a2
-timeCreated: 1507689152
+guid: b15666a098478a94ba232512e7ae821f
+timeCreated: 1507694574
 licenseType: Pro
 ModelImporter:
   serializedVersion: 21
@@ -199,23 +199,7 @@ ModelImporter:
     100382: Bind_Tongue_01_Jnt
     100384: Bind_Tongue_02_Jnt
     100386: Bind_Tongue_END
-    100388: Body
-    100390: Eye_L
-    100392: Eye_R
-    100394: Eyes
-    100396: Jacket
-    100398: Jacket 1
-    100400: Kid_GEO
-    100402: //RootNode
-    100404: Mouth
-    100406: necklace
-    100408: Props
-    100410: Tails
-    100412: Teeth_Lower
-    100414: Teeth_Upper
-    100416: Toggle_L
-    100418: Toggle_R
-    100420: Tongue
+    100388: //RootNode
     400000: Bind_Belly_Jnt
     400002: Bind_Chest_Jnt
     400004: Bind_ClothingRear_grp
@@ -410,47 +394,9 @@ ModelImporter:
     400382: Bind_Tongue_01_Jnt
     400384: Bind_Tongue_02_Jnt
     400386: Bind_Tongue_END
-    400388: Body
-    400390: Eye_L
-    400392: Eye_R
-    400394: Eyes
-    400396: Jacket
-    400398: Jacket 1
-    400400: Kid_GEO
-    400402: //RootNode
-    400404: Mouth
-    400406: necklace
-    400408: Props
-    400410: Tails
-    400412: Teeth_Lower
-    400414: Teeth_Upper
-    400416: Toggle_L
-    400418: Toggle_R
-    400420: Tongue
-    4300000: Body
-    4300002: Tails
-    4300004: Eye_R
-    4300006: Eye_L
-    4300008: Teeth_Upper
-    4300010: Teeth_Lower
-    4300012: Tongue
-    4300014: Jacket
-    4300016: Toggle_R
-    4300018: Toggle_L
-    4300020: necklace
+    400388: //RootNode
     7400000: Take 001
     9500000: //RootNode
-    13700000: Body
-    13700002: Eye_L
-    13700004: Eye_R
-    13700006: Jacket 1
-    13700008: necklace
-    13700010: Tails
-    13700012: Teeth_Lower
-    13700014: Teeth_Upper
-    13700016: Toggle_L
-    13700018: Toggle_R
-    13700020: Tongue
   materials:
     importMaterials: 1
     materialName: 0
@@ -464,7 +410,15 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'Take 001' has import animation warnings that
+      might lower retargeting quality:\nNote: Activate translation DOF on avatar to
+      improve retargeting quality.\n\t'Bind_NeckMid_Jnt' is inbetween humanoid transforms
+      and has rotation animation that will be discarded.\n\t'Bind_L_Clav_Jnt' is inbetween
+      humanoid transforms and has rotation animation that will be discarded.\n\t'Bind_L_hand_END'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Bind_R_Clav_Jnt'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Bind_R_hand_END'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'Bind_Pelvis_Jnt'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     animationCompression: 3
@@ -474,17 +428,45 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Take 001
+      takeName: Take 001
+      firstFrame: 1
+      lastFrame: 37
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 1
   meshes:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 0
+    importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
-    importLights: 0
+    importCameras: 1
+    importLights: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -500,9 +482,9 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-    normalCalculationMode: 0
+    normalCalculationMode: 4
   importAnimation: 1
-  copyAvatar: 0
+  copyAvatar: 1
   humanDescription:
     serializedVersion: 2
     human:
@@ -2006,7 +1988,8 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: b2e69f9140a2d9c439b4bac0eac947a2,
+    type: 3}
   animationType: 3
   humanoidOversampling: 1
   additionalBone: 0
