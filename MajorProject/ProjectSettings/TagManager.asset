@@ -7,6 +7,7 @@ TagManager:
   - GameObject
   - Bird
   - Map
+  - kid
   layers:
   - Default
   - TransparentFX

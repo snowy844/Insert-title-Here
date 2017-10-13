@@ -57,13 +57,13 @@ public class PlayerMovement : MonoBehaviour {
     private int jump = 0;
 
     private bool running;
-    private bool gliding;
+  
     private bool clicked;
-   
+    private bool negativeGravity;
     private bool m_grounded;
     private bool doubleTapA = false;
     private bool doubleTapD = false;
-    private bool movement = true;
+    
 
 
     void Start() {
@@ -120,8 +120,7 @@ public class PlayerMovement : MonoBehaviour {
         oldPos = transform.position;
 
         playerAnim.SetBool("jumpIsTrue", !m_grounded);
-
-
+        
     }
 
 
@@ -134,6 +133,8 @@ public class PlayerMovement : MonoBehaviour {
          
             if (hit.collider.tag == "Map") {
                 chargetimer = 0;
+                negativeGravity = false;
+               
                 //Physics.gravity = new Vector3(0, -9.87f, 0);
                 return true;
             }
@@ -152,19 +153,17 @@ public class PlayerMovement : MonoBehaviour {
         }
         else {
             running = false;
-          //  player.SetBool("runningIsTrue", false);
         }
 
 
         if (running) {
             movementSpeed = runSpeed + (slideMultiplyer * .5f); ;
-            //animator.Play("run");
+       
            
         }
         else {
             movementSpeed = walkSpeed + (slideMultiplyer * .25f); ;
-            //imator.Play("run");
-           //player.SetBool("runningIsTrue", false);
+            
         }
         
         //if (sliding) {
@@ -187,7 +186,7 @@ public class PlayerMovement : MonoBehaviour {
                 //rb.MovePosition(transform.position + (transform.forward* movementSpeed * Time.deltaTime));
                 rb.MovePosition(transform.position + (transform.forward * movementSpeed * Time.deltaTime));
 
-            playerAnim.SetFloat("runSpeed", Mathf.Abs(v + x));
+            playerAnim.SetFloat("walkSpeed", Mathf.Abs(v + x));
 
         }
 
@@ -262,7 +261,7 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.A)) {
             if (Time.time < _doubleTapTimeA + tapTime) {
                 doubleTapA = true;
-                movement = false;
+               
                 Dodge(h, v);
             }
             _doubleTapTimeA = Time.time;
@@ -272,7 +271,7 @@ public class PlayerMovement : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.D)) {
             if (Time.time < _doubleTapTimeD + tapTime) {
                 doubleTapD = true;
-                movement = false;
+                
                 Dodge(h, v);
             }
             _doubleTapTimeD = Time.time;
@@ -283,31 +282,34 @@ public class PlayerMovement : MonoBehaviour {
     
     void Jump() {
         //Player jumps up
-        if (Input.GetButton("Jump") && m_grounded == true) {
-            jumpCharger += Time.deltaTime;
+        if (Input.GetButtonDown("Jump") && m_grounded == true) {
 
-            if (jumpCharger < Maxjumpcharge) {
-                jumpForce = jumpCharger + 20 ;
-            }
-            if( jumpCharger >= Maxjumpcharge) {
-                jumpForce = Maxjumpcharge + 20;
-            }
-              
-                playerAnim.SetBool("jumpPrep", true);
+
+            playerAnim.SetBool("failedLanding", false);
+         
                 gravity = 0.87f;
-            
+            rb.AddForce(transform.up * 10, ForceMode.VelocityChange);
         }
-       else if (Input.GetButtonUp("Jump")) {
 
-            rb.AddForce(transform.up * jumpForce + moveDir, ForceMode.VelocityChange);
+        if (Input.GetButton("Jump")) {
+            jumpCharger += Time.deltaTime;
+            if (jumpCharger < Maxjumpcharge) {
+                rb.AddForce(transform.up * 10, ForceMode.Acceleration);
+            }
+            if (jumpCharger > Maxjumpcharge)
+                negativeGravity = true;
+        }
+       if (Input.GetButtonUp("Jump")) {
+
+
             m_grounded = false;
             running = false;
             sliding = false;
             jump = 1;
             gravity = 0.87f;
             jumpCharger = 0;
-            //playerAnim.SetBool("jumpIsTrue", !m_grounded);
-            playerAnim.SetBool("jumpPrep", false);
+            negativeGravity = true;
+           
         }
         if (m_grounded == false) {
             chargetimer += Time.deltaTime;
@@ -332,8 +334,10 @@ public class PlayerMovement : MonoBehaviour {
         if (m_grounded) {
             gravity = -9.87f;
         }
+        
         Physics.gravity = new Vector3(0, gravity, 0);
-        rb.AddForce(-Vector3.up * negativeJumpForce, ForceMode.VelocityChange);
+        if(negativeGravity)
+        rb.AddForce(-transform.up * negativeJumpForce, ForceMode.VelocityChange);
     }
 
     void Dodge(float h, float v) {
@@ -463,7 +467,8 @@ public class PlayerMovement : MonoBehaviour {
                     if (hitForLanding.distance > failRunClickMax && Input.GetMouseButtonDown(0) || hitForLanding.distance < failRunClickMin && Input.GetMouseButtonDown(0)|| hitForLanding.distance > failRunClickMax && Input.GetButtonDown("LandRun") || hitForLanding.distance < failRunClickMin && Input.GetButtonDown("LandRun")) {
                         jump = 1;
                         clicked = true;
-                  //  print("didnt land");
+                    //  print("didnt land");
+                    playerAnim.SetBool("failedLanding", true);
                     }
 
                 if (hitForLanding.distance <= succSlideClickMax && hitForLanding.distance >= succRunfulClickMin && Input.GetMouseButtonDown(0) || hitForLanding.distance <= succSlideClickMax && hitForLanding.distance >= succSlidefulClickMin && Input.GetButtonDown("LandSlide")) {
@@ -477,6 +482,7 @@ public class PlayerMovement : MonoBehaviour {
                     jump = 1;
                     clicked = true;
                     //print("didnt land");
+                    playerAnim.SetBool("failedLanding", true);
                 }
             }
             }
@@ -506,7 +512,8 @@ public class PlayerMovement : MonoBehaviour {
             if (jump == 1) {
                 jump = 0;
                 slideMultiplyer = 1;
-               // runSpeed = 15 + (slideMultiplyer * .25f);
+                // runSpeed = 15 + (slideMultiplyer * .25f);
+                playerAnim.SetBool("failedLanding", true);
             }
     }
 } 
